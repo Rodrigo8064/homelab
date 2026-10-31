@@ -22,7 +22,7 @@ git clone <url-do-portfolio-homepage>
 ## Subir
  
 cd ~/projetos/homelab/traefik  && docker compose up -d
-cd ~/projetos/homelab/homepage && docker compose up -d --build
+cd ~/projetos/homelab/homepage && BUILDX_BAKE_ENTITLEMENTS_FS=0 docker compose up -d --build
  
 ## Testar (sem Cloudflare)
  
