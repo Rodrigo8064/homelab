@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: traefik:v3.6          # fixe a versão; evite :latest em infra
+    container_name: traefik
+    restart: unless-stopped
+ 
+    ports:
+      # "HOST:CONTAINER"
+      # Se a porta 80 do host estiver ocupada, troque para "8081:80"
+      # e aponte o túnel da Cloudflare para http://localhost:8081
+      - "80:80"
+      # Dashboard acessível só pela própria máquina (127.0.0.1)
+      - "127.0.0.1:8080:8080"
+ 
+    volumes:
+      # Socket do Docker: é assim que o Traefik "enxerga" os containers.
+      # :ro = somente leitura
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+ 
+    networks:
+      - proxy
+ 
+networks:
+  proxy:
+    name: proxy   # nome fixo (sem prefixo do projeto) para outros stacks usarem

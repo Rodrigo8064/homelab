@@ -1,0 +1,40 @@
+# =====================================================================
+# homepage/docker-compose.yml  ->  SUA APLICAÇÃO (Next.js)
+# Repare: aqui NÃO tem "ports:". Ninguém acessa o app direto.
+# Todo tráfego entra pelo Traefik, que encontra o app pelas labels.
+# =====================================================================
+
+services:
+  homepage:
+    build:
+      context: ../../portfolio-homepage   # onde está o código do site
+      dockerfile: Dockerfile
+    image: homepage:local
+    container_name: homepage
+    restart: unless-stopped
+
+    networks:
+      - proxy
+
+    # Healthcheck: o Traefik só manda tráfego para containers "healthy".
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+    labels:
+      # 1) Liga o Traefik para este container
+      - "traefik.enable=true"
+
+      # 2) ROUTER: "qual requisição vem para mim?"
+      - "traefik.http.routers.homepage.rule=Host(`rodrigoolima.com.br`) || Host(`www.rodrigoolima.com.br`)"
+      - "traefik.http.routers.homepage.entrypoints=web"
+
+      # 3) SERVICE: "para onde mando?" -> porta interna (EXPOSE 3000 do Dockerfile)
+      - "traefik.http.services.homepage.loadbalancer.server.port=3000"
+
+networks:
+  proxy:
+    external: true   # criada pelo stack do Traefik

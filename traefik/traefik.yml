@@ -1,0 +1,23 @@
+# --- Entrypoints: as "portas de entrada" do Traefik --------------------
+entryPoints:
+  web:
+    address: ":80"          # Porta DENTRO do container. O Cloudflare chega aqui.
+ 
+# --- Providers: de onde o Traefik descobre as rotas --------------------
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false # SEGURANÇA: só expõe containers com traefik.enable=true
+    network: proxy          # Rede usada para falar com os containers
+ 
+# --- API / Dashboard ---------------------------------------------------
+api:
+  dashboard: true
+  insecure: true            # Dashboard SEM autenticação, na porta 8080.
+                            # OK porque no compose publicamos só em 127.0.0.1.
+ 
+# --- Logs --------------------------------------------------------------
+log:
+  level: INFO               # Se algo der errado, troque para DEBUG
+ 
+accessLog: {}               # Mostra cada requisição que passa pelo proxy

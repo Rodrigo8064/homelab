@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+ 
+*.tgz
+*.tar.gz
+backups/
+ 
+acme.json
+letsencrypt/
+ 
+.DS_Store
+.vscode/
+.idea/
+*.log
