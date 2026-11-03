@@ -1,7 +1,7 @@
 services:
   backoffice-api:
     build:
-      context: ../../backoffice-api
+      context: ../../backoffice_api
       dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
