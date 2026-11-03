@@ -6,6 +6,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      RUN_MIGRATIONS: "false"
     depends_on:
       migrations:
         condition: service_completed_successfully
@@ -18,6 +20,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 20s
+    deploy:
+      replicas: 3
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
