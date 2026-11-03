@@ -1,5 +1,5 @@
 services:
-  wishlist-api:
+  inventory-api:
     build:
       context: ../../car_api_pycode
       dockerfile: Dockerfile
